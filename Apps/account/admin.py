@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
 
 # Register your models here.
 from django.contrib.auth.admin import UserAdmin
@@ -20,10 +19,10 @@ class CustomerUserAdmin(UserAdmin):
     search_fields = ('username', 'email', 'first_name', 'last_name', 'phone',)
 
     fieldsets = (
-        (_('Identification'), {'fields': ('username', 'password', 'is_active', 'is_staff', 'activation_key')}),
-        (_('Personal Information'), {'fields': ('email', 'first_name', 'last_name', 'phone', 'birth_date',
+        ('Identification', {'fields': ('username', 'password', 'is_active', 'is_staff', 'activation_key')}),
+        ('Personal Information', {'fields': ('email', 'first_name', 'last_name', 'phone', 'birth_date',
                                                 'profile_picture')}),
-        (_('Complementary Information'), {'fields': ('country', 'user_condition_is_read', 'date_joined',
+        ('Complementary Information', {'fields': ('country', 'user_condition_is_read', 'date_joined',
                                                      'date_update')})
     )
 

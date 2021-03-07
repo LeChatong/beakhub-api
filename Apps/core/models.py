@@ -7,7 +7,6 @@ from model_utils.fields import StatusField, MonitorField
 from model_utils.models import TimeStampedModel
 from rest_framework_api_key.models import AbstractAPIKey, BaseAPIKeyManager
 
-from django.utils.translation import ugettext_lazy as _
 
 
 class BaseModel(TimeStampedModel):
@@ -29,9 +28,9 @@ class PublishableManager(models.Manager):
 
 class PublishableModel(BaseModel):
     STATUS = Choices(
-        ('draft', _('draft')),
-        ('published', _('published')),
-        ('removed', _('removed'))
+        ('draft', 'draft'),
+        ('published', 'published'),
+        ('removed', 'removed')
     )
     status = StatusField()
     status_changed = MonitorField(monitor='status')
@@ -47,5 +46,5 @@ class UserAPIKey(AbstractAPIKey):
     objects = BaseAPIKeyManager()
 
     class Meta:
-        verbose_name = _('Clé API')
-        verbose_name_plural = _('Clés API')
+        verbose_name = 'API Key'
+        verbose_name_plural = 'API Keys'

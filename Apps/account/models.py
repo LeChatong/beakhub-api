@@ -3,7 +3,6 @@ from uuid import uuid4
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
 from django_countries.fields import CountryField
@@ -17,7 +16,7 @@ class UserManager(BaseUserManager):
     def create_user(self, username, email=None, password=None, **extra_fields):
 
         if not username:
-            raise ValueError(_('The username is mandatory'))
+            raise ValueError('The username is mandatory')
         if email:
             email = self.normalize_email(email)
         user = self.model(
@@ -42,67 +41,70 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(
         unique=True, db_index=True, max_length=100,
-        verbose_name=_('Username')
+        verbose_name='Username'
     )
     email = models.EmailField(
         blank=True, null=True, unique=True, db_index=True,
-        verbose_name=_('Email')
+        verbose_name='Email'
     )
     first_name = models.CharField(
         null=True, blank=True, max_length=200,
-        verbose_name=_('First name')
+        verbose_name='First name'
     )
     last_name = models.CharField(
         null=True, blank=True, max_length=200,
-        verbose_name=_('Last name')
+        verbose_name='Last name'
     )
     birth_date = models.DateField(
         blank= True, null=True,
-        verbose_name=_('Birth Date')
+        verbose_name='Birth Date'
     )
     phone = PhoneNumberField(
         blank=True, null=True,
-        verbose_name=_('Phone Number')
+        verbose_name='Phone Number'
     )
     country = CountryField(
         default=settings.DEFAULT_COUNTRY,
-        verbose_name=_('Countries')
+        verbose_name='Countries'
     )
     is_staff = models.BooleanField(
         default=False,
-        verbose_name=_('Is Staff ?')
+        verbose_name='Is Staff ?'
     )
     is_active = models.BooleanField(
         default=False,
-        verbose_name=_('Is Activated ?')
+        verbose_name='Is Activated ?'
     )
     activation_key = models.UUIDField(
         unique=True, default=uuid4, editable=False,
-        verbose_name=_('Activation Key')
+        verbose_name='Activation Key'
     )
     date_joined = models.DateTimeField(
         auto_now_add=True, editable=False,
-        verbose_name=_('Date of inscription')
+        verbose_name='Date of inscription'
     )
     date_update = models.DateTimeField(
         auto_now_add=True,
-        verbose_name=_('Date Updated')
+        verbose_name='Date Updated'
     )
     user_condition_is_read = models.BooleanField(
         default=False,
-        verbose_name=_('User conditions is read ?')
+        verbose_name='User conditions is read ?'
     )
     profile_picture = models.ImageField(
-        upload_to="photo_user/", null=True,
-        verbose_name=_('Profile Picture')
+        upload_to="photo_user/", null=True, blank=True,
+        verbose_name='Profile Picture'
     )
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
 
     objects = UserManager()
 
     class Meta:
-        app_label = _('Account')
-        verbose_name = _('User')
-        verbose_name_plural = _('Users')
+        app_label = 'account'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
 
     def __str__(self):
         return self.username

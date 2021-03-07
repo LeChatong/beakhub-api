@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     # Utils Apps
+    'grappelli',
     'rest_framework',
     'rest_framework_api_key',
     'corsheaders',
@@ -57,6 +58,9 @@ INSTALLED_APPS = [
     'Apps.account'
 ]
 
+# Custom User Model
+AUTH_USER_MODEL = 'account.User'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -67,6 +71,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
+
+SITE_ID=1
 
 ROOT_URLCONF = 'BeakHub.urls'
 
@@ -149,6 +155,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+GRAPPELLI_ADMIN_TITLE = os.environ.get("GRAPPELLI_ADMIN_TITLE", "BeakHub Admin")
 
 DEFAULT_COUNTRY = "CM"
 
