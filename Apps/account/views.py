@@ -11,9 +11,20 @@ from Apps.core.models import UserAPIKey
 from Apps.core.permissions import UserHasAPIKey
 
 
-class UserCreateView(generics.CreateAPIView):
+class UserListView(generics.ListCreateAPIView):
     permission_classes = [UserHasAPIKey]
     serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(
+            get_list_or_404(
+                self.get_queryset().all()
+            ),
+            many=True,
+            context={'request': request}
+        )
+        return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
         email = request.data.get('email', None)
@@ -42,39 +53,23 @@ class UserCreateView(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class UserListView(generics.ListAPIView):
-    permission_classes = [UserHasAPIKey]
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-
-    def get(self, request):
-        serializer = self.get_serializer(
-            get_list_or_404(
-                self.get_queryset().all()
-            ),
-            many=True,
-            context={'request': request}
-        )
-        return Response(serializer.data)
-
-
 class UserDetailsView(generics.RetrieveUpdateAPIView):
     permission_classes = [UserHasAPIKey]
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
-    def get(self, request, pk=None):
+    def get(self, request, pk=None, *args, **kwargs):
         serializer = self.get_serializer(
             get_object_or_404(
                 self.get_queryset(),
                 pk=pk
             ),
             many=False,
-            context={'request':request}
+            context={'request': request}
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def put(self, request, pk=None):
+    def put(self, request, pk=None, *args, **kwargs):
         email = request.data.get('email', None)
         username = request.data.get('username', None)
         first_name = request.data.get('first_name', None)

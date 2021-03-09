@@ -2,11 +2,18 @@ from autoslug import AutoSlugField
 from django.db import models
 
 # Create your models here.
+from model_utils import Choices
+
 from Apps.account.models import User
 from Apps.core.models import BaseModel, PublishableModel
 
 
-class Category(BaseModel):
+class CategoryManager(models.Manager):
+    def available(self):
+        return self.get_queryset().filter(status='published')
+
+
+class Category(PublishableModel):
     name = models.CharField(
         verbose_name='Name',
         max_length=150,
@@ -17,6 +24,8 @@ class Category(BaseModel):
         unique=True,
         verbose_name='Slug'
     )
+
+    objects = CategoryManager()
 
     class Meta:
         app_label = 'job'

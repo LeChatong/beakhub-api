@@ -40,6 +40,7 @@ urlpatterns = [
     path("grappelli/", include("grappelli.urls")),
     path("admin/", admin.site.urls),
     path("api/v1/account/", include("Apps.account.urls")),
+    path("api/v1/job/", include("Apps.job.urls")),
     path("api/v1/", schema_view.with_ui(
         'swagger', cache_timeout=0
     ), name='schema-swagger-ui'),

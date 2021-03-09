@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     # Local Apps
     'Apps.core',
-    'Apps.account'
+    'Apps.account',
+    'Apps.job'
 ]
 
 # Custom User Model

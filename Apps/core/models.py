@@ -8,7 +8,6 @@ from model_utils.models import TimeStampedModel
 from rest_framework_api_key.models import AbstractAPIKey, BaseAPIKeyManager
 
 
-
 class BaseModel(TimeStampedModel):
     class Meta:
         abstract = True
