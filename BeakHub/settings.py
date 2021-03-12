@@ -30,7 +30,9 @@ SECRET_KEY = '8^et=8@1g!2ah0o33^@v%$_)*c%zwfd5nf*mrh_+-j8-w=faz^'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "*"
+    "localhost",
+    "172.16.30.38",
+    "127.0.0.1",
 ]
 
 
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     # Utils Apps
     'grappelli',
+    'import_export',
     'rest_framework',
     'rest_framework_api_key',
     'corsheaders',
@@ -56,7 +59,8 @@ INSTALLED_APPS = [
     # Local Apps
     'Apps.core',
     'Apps.account',
-    'Apps.job'
+    'Apps.job',
+    'Apps.address',
 ]
 
 # Custom User Model
