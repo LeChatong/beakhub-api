@@ -4,6 +4,8 @@ from django.db import models
 from django_countries.fields import Country as CountryType, CountryField
 from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 
+from Apps.job.models import Job
+
 
 class PlaceManager(models.Manager):
 
