@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from import_export.admin import ImportExportModelAdmin
 
-from Apps.address.models import Country, City
+from Apps.address.models import Country, City, Zone
 
 
 class CityInlineAdmin(admin.StackedInline):
@@ -11,6 +11,14 @@ class CityInlineAdmin(admin.StackedInline):
     classes = ('grp-collapse grp-open',)
     inline_classes = ('grp-collapse grp-open',)
     extra = 0
+
+
+class ZoneInlineAdmin(admin.StackedInline):
+    model = Zone
+    classes = ('grp-collapse grp-open',)
+    inline_classes = ('grp-collapse grp-open',)
+    extra = 0
+
 
 class CountryAdmin(ImportExportModelAdmin):
     model = Country
@@ -24,14 +32,28 @@ class CountryAdmin(ImportExportModelAdmin):
     def phone(self, obj):
         return obj.phone_prefix
     phone.short_description = 'Phone Prefix'
-    inlines = [CityInlineAdmin,]
+    inlines = [CityInlineAdmin]
 
 
 class CityAdmin(admin.ModelAdmin):
     model = City
     list_filter = ('country',)
+    list_display_links = ('name',)
+    list_display = ('name', 'country', 'is_active',)
     search_fields = ('name',)
+    ordering = ('name',)
+    inlines = [ZoneInlineAdmin]
 
 
+class ZoneAdmin(admin.ModelAdmin):
+    model = Zone
+    list_filter = ('city',)
+    list_display_links = ('name',)
+    list_display = ('name', 'city', 'is_active',)
+    search_fields = ('name',)
+    ordering = ('name',)
+
+
+admin.site.register(Zone, ZoneAdmin)
 admin.site.register(City, CityAdmin)
 admin.site.register(Country, CountryAdmin)

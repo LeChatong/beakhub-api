@@ -19,11 +19,10 @@ class CustomerUserAdmin(UserAdmin):
     search_fields = ('username', 'email', 'first_name', 'last_name', 'phone',)
 
     fieldsets = (
-        ('Identification', {'fields': ('username', 'password', 'is_active', 'is_staff', 'activation_key')}),
+        ('Identification', {'fields': ('username', 'password', 'is_active', 'is_staff')}),
         ('Personal Information', {'fields': ('email', 'first_name', 'last_name', 'phone', 'birth_date',
-                                                'profile_picture')}),
-        ('Complementary Information', {'fields': ('country', 'user_condition_is_read', 'date_joined',
-                                                     'date_update')})
+                                             'profile_picture')}),
+        ('Complementary Information', {'fields': ('country', 'user_condition_is_read',)})
     )
 
 

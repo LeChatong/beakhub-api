@@ -52,7 +52,6 @@ class JobFilter(drf_filters.FilterSet):
         model = Job
         fields = [
             'user_id',
-            'category_id',
         ]
 
 
@@ -66,12 +65,9 @@ class JobListCreateView(generics.ListCreateAPIView):
         qs = super().get_queryset()
         search = self.request.query_params.get('search', None)
         user_id = self.request.query_params.get('user_id', None)
-        category_id = self.request.query_params.get('category_id', None)
 
         if user_id:
             qs = qs.filter(user_id=user_id)
-        if category_id:
-            qs = qs.filter(category_id=category_id)
         if search:
             qs = qs.filter(
                 Q(title__icontains=search) |

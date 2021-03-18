@@ -39,15 +39,15 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.contenttypes',
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
     # Utils Apps
-    'grappelli',
     'import_export',
     'rest_framework',
     'rest_framework_api_key',
@@ -199,3 +199,8 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+#GRAPPELLI_INDEX_DASHBOARD = 'BeakHub.dashboard.CustomIndexDashboard'
+#GRAPPELLI_INDEX_DASHBOARD = {  # alternative method
+#    'yourproject.admin.admin_site': 'yourproject.my_dashboard.CustomIndexDashboard',
+#}
