@@ -17,18 +17,16 @@ class JobSerializer(serializers.HyperlinkedModelSerializer):
         view_name='job-detail'
     )
     user = UserSerializer(many=False)
-    category = CategorySerializer(many=False)
 
     class Meta:
         model = Job
         fields = [
             'url',
-            'id',
+            'token',
             'slug',
             'title',
             'description',
             'is_active',
-            'category',
             'user',
             'created_at',
             'updated_at'

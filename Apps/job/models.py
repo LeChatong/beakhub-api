@@ -50,6 +50,7 @@ class Job(models.Model):
     )
     token = models.UUIDField(
         default=uuid4,
+        primary_key=True,
         db_index=True,
         editable=False
     )
@@ -63,7 +64,6 @@ class Job(models.Model):
     )
     user = models.OneToOneField(
         User,
-        primary_key=True,
         related_name='jobs',
         on_delete=models.CASCADE,
         verbose_name='User'

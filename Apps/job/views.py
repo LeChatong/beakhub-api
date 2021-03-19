@@ -18,9 +18,10 @@ class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.available()
 
     def get(self, request, *args, **kwargs):
+        print("LeChatong")
         serializer = self.get_serializer(
             get_list_or_404(
-                self.queryset
+                self.get_queryset()
             ),
             many=True,
             context={'request': request}
