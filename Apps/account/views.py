@@ -12,7 +12,7 @@ from Apps.core.permissions import UserHasAPIKey
 
 
 class UserListView(generics.ListCreateAPIView):
-    permission_classes = [UserHasAPIKey]
+    permission_classes = []
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -54,7 +54,7 @@ class UserListView(generics.ListCreateAPIView):
 
 
 class UserDetailsView(generics.RetrieveUpdateAPIView):
-    permission_classes = [UserHasAPIKey]
+    permission_classes = []
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -112,7 +112,7 @@ class UserDetailsView(generics.RetrieveUpdateAPIView):
 
 
 class UserDetailsByUsernameView(generics.RetrieveAPIView):
-    permission_classes = [UserHasAPIKey]
+    permission_classes = []
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -129,7 +129,7 @@ class UserDetailsByUsernameView(generics.RetrieveAPIView):
 
 
 class UserDetailsByEmailView(generics.RetrieveAPIView):
-    permission_classes = [UserHasAPIKey]
+    permission_classes = []
     serializer_class = UserSerializer
     queryset = User.objects.all()
 

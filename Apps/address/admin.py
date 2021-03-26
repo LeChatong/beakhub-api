@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from import_export.admin import ImportExportModelAdmin
 
-from Apps.address.models import Country, City, Zone
+from Apps.address.models import Country, City, Zone, Address
 
 
 class CityInlineAdmin(admin.StackedInline):
@@ -54,6 +54,11 @@ class ZoneAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 
+class AddressAdmin(admin.ModelAdmin):
+    model = Address
+
+
 admin.site.register(Zone, ZoneAdmin)
 admin.site.register(City, CityAdmin)
 admin.site.register(Country, CountryAdmin)
+admin.site.register(Address, AddressAdmin)
