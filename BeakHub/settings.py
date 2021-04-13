@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from decouple import config
-from  dj_database_url import parse as dburl
+from dj_database_url import parse as dburl
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'Apps.account',
     'Apps.job',
     'Apps.address',
+    'Apps.comment',
+    'Apps.favorite',
 ]
 
 # Custom User Model
@@ -77,7 +79,7 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
 ]
 
-SITE_ID=1
+SITE_ID = 1
 
 ROOT_URLCONF = 'BeakHub.urls'
 
@@ -161,6 +163,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, "Public", "media")
+MEDIA_URL = "/media/"
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIR = [
+    ("static", os.path.join(BASE_DIR, "Public", "static"))
+]
+
 GRAPPELLI_ADMIN_TITLE = os.environ.get("GRAPPELLI_ADMIN_TITLE", "BeakHub Admin")
 
 DEFAULT_COUNTRY = "CM"
@@ -170,14 +180,15 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        "rest_framework_api_key.permissions.HasAPIKey",
+        'rest_framework_api_key.permissions.HasAPIKey',
     )
 
 }
 
 API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000"
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
 ]
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = list(default_headers) + [
