@@ -2,7 +2,8 @@ from django.contrib.sites.models import Site
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
-from Apps.address.models import Country, City, Zone
+from Apps.address.models import Country, City, Zone, Address
+from Apps.job.serializers import JobSerializer
 from BeakHub import settings
 
 
@@ -60,4 +61,25 @@ class ZoneSerializer(serializers.HyperlinkedModelSerializer):
             'name',
             'is_active',
             'city'
+        ]
+
+
+class AddressSerializer(serializers.HyperlinkedModelSerializer):
+    zone = ZoneSerializer(many=False)
+    job = JobSerializer(many=False)
+    url = serializers.HyperlinkedIdentityField(
+        view_name='address-detail'
+    )
+
+    class Meta:
+        model = Address
+        fields = [
+            'url',
+            'id',
+            'job_id',
+            'zone_id',
+            'job',
+            'zone',
+            'description',
+            'is_active'
         ]

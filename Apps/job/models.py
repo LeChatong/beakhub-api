@@ -45,13 +45,10 @@ class Category(PublishableModel):
 class Job(models.Model):
     slug = AutoSlugField(
         populate_from='full_name',
-        unique=True,
         verbose_name='Slug'
     )
     token = models.UUIDField(
         default=uuid4,
-        primary_key=True,
-        db_index=True,
         editable=False
     )
     title = models.CharField(
@@ -77,6 +74,26 @@ class Job(models.Model):
     is_active = models.BooleanField(
         default=True,
         verbose_name='Is activated ?'
+    )
+    link_facebook = models.URLField(
+        null=True, blank=True,
+        verbose_name='Facebook link'
+    )
+    link_instagram = models.URLField(
+        null=True, blank=True,
+        verbose_name='Instagram link'
+    )
+    link_linkedin = models.URLField(
+        null=True, blank=True,
+        verbose_name='LinkdeIn profile link'
+    )
+    link_snapchat = models.URLField(
+        null=True, blank=True,
+        verbose_name='Link snapchat account'
+    )
+    link_telegram = models.URLField(
+        null=True, blank=True,
+        verbose_name='Telegram link'
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -129,8 +146,7 @@ class PhoneNumber(models.Model):
     job = models.ForeignKey(
         Job,
         on_delete=models.CASCADE,
-        related_name='Job',
-        verbose_name='Job'
+        related_name='+'
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -144,6 +160,12 @@ class PhoneNumber(models.Model):
 
     def __str__(self):
         return '({}) {}'.format(self.country.code, self.phone)
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.has_whatsapp:
+            self.discuss_link = 'https://wa.me/{}'.format(self.phone)
+        super().save()
 
     class Meta:
         app_label = 'job'
@@ -163,8 +185,7 @@ class EmailAddress(models.Model):
     job = models.ForeignKey(
         Job,
         on_delete=models.CASCADE,
-        verbose_name='Job',
-        related_name='email'
+        related_name='+'
     )
     created_at = models.DateTimeField(
         auto_now_add=True,

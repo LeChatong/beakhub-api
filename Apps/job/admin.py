@@ -34,6 +34,8 @@ class JobAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Job Information', {'fields': ('title', 'description', 'is_active',)}),
         ('Complementary Information', {'fields': ('user', 'category',)}),
+        ('Social Media', {'fields': ('link_facebook', 'link_instagram', 'link_linkedin', 'link_snapchat',
+                                     'link_telegram',)}),
     )
     search_fields = ('title',)
     inlines = [PhoneNumberInlineAdmin, EmailAddressInlineAdmin]
@@ -42,16 +44,16 @@ class JobAdmin(admin.ModelAdmin):
 class PhoneNumberAdmin(admin.ModelAdmin):
     model = PhoneNumber
     list_display_links = ('phone',)
-    list_display = ('phone', 'country', 'has_whatsapp', 'discuss_link', 'is_active',)
+    list_display = ('phone', 'country', 'has_whatsapp', 'discuss_link', 'is_active', 'created_at', 'updated_at',)
 
 
-class EmailAddresAdmin(admin.ModelAdmin):
+class EmailAddressAdmin(admin.ModelAdmin):
     model = EmailAddress
     list_display_links = ('email',)
-    list_display = ('email', 'is_active',)
+    list_display = ('email', 'is_active', 'created_at', 'updated_at',)
 
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Job, JobAdmin)
 admin.site.register(PhoneNumber, PhoneNumberAdmin)
-admin.site.register(EmailAddress, EmailAddresAdmin)
+admin.site.register(EmailAddress, EmailAddressAdmin)

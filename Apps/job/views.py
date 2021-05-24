@@ -5,20 +5,21 @@ from rest_framework import generics, status
 from django.shortcuts import render, get_list_or_404
 from django_filters import rest_framework as drf_filters
 
+from django.utils.translation import ugettext as _
+
 # Create your views here.
 from Apps.account.models import User
 from Apps.core.permissions import UserHasAPIKey
-from Apps.job.models import Category, Job
+from Apps.job.models import Category, Job, PhoneNumber
 from Apps.job.serializers import CategorySerializer, JobSerializer
 
 
 class CategoryListView(generics.ListAPIView):
-    permission_classes = [UserHasAPIKey]
+    permission_classes = []
     serializer_class = CategorySerializer
     queryset = Category.objects.available()
 
     def get(self, request, *args, **kwargs):
-        print("LeChatong")
         serializer = self.get_serializer(
             get_list_or_404(
                 self.get_queryset()
@@ -30,7 +31,7 @@ class CategoryListView(generics.ListAPIView):
 
 
 class CategoryDetailsView(generics.RetrieveAPIView):
-    permission_classes = [UserHasAPIKey]
+    permission_classes = []
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
 
@@ -57,7 +58,7 @@ class JobFilter(drf_filters.FilterSet):
 
 
 class JobListCreateView(generics.ListCreateAPIView):
-    permission_classes = [UserHasAPIKey]
+    permission_classes = []
     serializer_class = JobSerializer
     filterset_class = JobFilter
     queryset = Job.objects.all()
@@ -97,21 +98,21 @@ class JobListCreateView(generics.ListCreateAPIView):
         category_id = request.data.get('category_id', None)
 
         if title is None:
-            return Response({'error': 'The \'Title\' is mandatory'}, status.HTTP_400_BAD_REQUEST)
+            return Response({'error': _('The \'Title\' is mandatory')}, status.HTTP_400_BAD_REQUEST)
         if description is None:
-            return Response({'error': 'The \'Description\' is mandatory'}, status.HTTP_400_BAD_REQUEST)
+            return Response({'error': _('The \'Description\' is mandatory')}, status.HTTP_400_BAD_REQUEST)
         if user_id is None:
-            return Response({'error': 'The \'User\' is mandatory'}, status.HTTP_400_BAD_REQUEST)
+            return Response({'error': -('The \'User\' is mandatory')}, status.HTTP_400_BAD_REQUEST)
         if category_id is None:
-            return Response({'error': 'The \'Category\' is mandatory'}, status.HTTP_400_BAD_REQUEST)
+            return Response({'error': _('The \'Category\' is mandatory')}, status.HTTP_400_BAD_REQUEST)
         try:
             user = User.objects.get(pk=user_id)
         except User.DoesNotExist:
-            return Response({'error': 'This user not found'}, status.HTTP_404_NOT_FOUND)
+            return Response({'error': _('This user not found')}, status.HTTP_404_NOT_FOUND)
         try:
             category = Category.objects.get(pk=category_id)
         except Category.DoesNotExist:
-            return Response({'error': 'This category not found'}, status.HTTP_404_NOT_FOUND)
+            return Response({'error': _('This category not found')}, status.HTTP_404_NOT_FOUND)
 
         job = Job(
             title=title,
@@ -129,7 +130,7 @@ class JobListCreateView(generics.ListCreateAPIView):
 
 
 class JobDetailsView(generics.RetrieveUpdateAPIView):
-    permission_classes = [UserHasAPIKey]
+    permission_classes = []
     serializer_class = JobSerializer
     queryset = Job.objects.all()
 
@@ -176,4 +177,36 @@ class JobDetailsView(generics.RetrieveUpdateAPIView):
             )
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Job.DoesNotExist:
-            return Response({'error': 'This Job not found'}, status.HTTP_404_NOT_FOUND)
+            return Response({'error': _('This Job not found')}, status.HTTP_404_NOT_FOUND)
+
+
+class PhoneNumberFilter(drf_filters.FilterSet):
+    class Meta:
+        model = PhoneNumber
+        fields = [
+            'job_id',
+        ]
+
+
+class PhoneNumberCreateListView(generics.ListCreateAPIView):
+    permission_classes = []
+    serializer_class = JobSerializer
+    filterset_class = PhoneNumberFilter
+    queryset = PhoneNumber.objects.all()
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        job_id = self.request.query_params.get('job_id', None)
+        if job_id:
+            qs = qs.filter(job_id=job_id)
+        return qs
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(
+            get_list_or_404(
+                self.get_queryset()
+            ),
+            many=True,
+            context={'request': request}
+        )
+        return Response(serializer.data)

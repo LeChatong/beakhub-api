@@ -123,3 +123,35 @@ class Zone(models.Model):
             self.name,
             self.city.full_name
         )
+
+
+class Address(models.Model):
+    job = models.ForeignKey(
+        Job,
+        on_delete=models.CASCADE,
+        related_name='+'
+    )
+    zone = models.ForeignKey(
+        Zone,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    description = models.TextField(
+        max_length=255,
+        null=False,
+        verbose_name='Description'
+    )
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name='Is Activated'
+    )
+
+    objects = PlaceManager()
+
+    class Meta:
+        verbose_name = 'Address'
+        verbose_name_plural = 'Address'
+
+    def __str__(self):
+        return '{}, {}'.format(self.job.title, self.zone)
