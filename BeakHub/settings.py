@@ -95,6 +95,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
             ],
         },
     },
@@ -143,7 +144,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -157,6 +157,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+gettext = lambda x: x
+
+LANGUAGES = (
+    ('fr', gettext('French')),
+    ('en', gettext('English')),
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -174,6 +181,10 @@ STATICFILES_DIR = [
 GRAPPELLI_ADMIN_TITLE = os.environ.get("GRAPPELLI_ADMIN_TITLE", "BeakHub Admin")
 
 DEFAULT_COUNTRY = "CM"
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, '/locale/'),
+)
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (

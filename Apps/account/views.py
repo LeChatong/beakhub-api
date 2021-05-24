@@ -10,9 +10,25 @@ from Apps.account.serializers import UserSerializer
 from Apps.core.models import UserAPIKey
 from Apps.core.permissions import UserHasAPIKey
 
+from django.utils.translation import ugettext as _
+
+
+def activation_account(request, key):
+    try:
+        user = User.objects.get(activation_key=key)
+        user.is_active = True
+        user.save()
+
+        context = {
+            'user': user
+        }
+        return render(request, '', context)
+    except User.DoesNotExist:
+        return render(request, '', context)
+
 
 class UserListView(generics.ListCreateAPIView):
-    permission_classes = []
+    permission_classes = [UserHasAPIKey]
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -33,18 +49,18 @@ class UserListView(generics.ListCreateAPIView):
 
         try:
             user = User.objects.get(email=email)
-            return Response({"Error": 'This mail address already used'}, status=status.HTTP_208_ALREADY_REPORTED)
+            return Response({"error": _('This mail address already used')}, status=status.HTTP_208_ALREADY_REPORTED)
         except User.DoesNotExist:
             pass
         try:
             user = User.objects.get(username=username)
-            return Response({"Error": 'This username already used'}, status=status.HTTP_208_ALREADY_REPORTED)
+            return Response({"error": _('This username already used')}, status=status.HTTP_208_ALREADY_REPORTED)
         except User.DoesNotExist:
             pass
         try:
             user = User.objects.create_user(username, email, password)
         except User.DoesNotExist:
-            return Response({"Error": 'Error Encoured'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": _('Error Encoured')}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer = self.get_serializer(
             user,
             many=False,
@@ -80,7 +96,7 @@ class UserDetailsView(generics.RetrieveUpdateAPIView):
         try:
             user = self.get_queryset().get(pk=pk)
         except User.DoesNotExist:
-            return Response({"error":"User not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": _('User not found')}, status=status.HTTP_404_NOT_FOUND)
 
         if email is not None:
             user.email = email

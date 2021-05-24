@@ -5,6 +5,8 @@ from rest_framework import generics, status
 from django.shortcuts import render, get_list_or_404
 from django_filters import rest_framework as drf_filters
 
+from django.utils.translation import ugettext as _
+
 # Create your views here.
 from Apps.account.models import User
 from Apps.core.permissions import UserHasAPIKey
@@ -96,21 +98,21 @@ class JobListCreateView(generics.ListCreateAPIView):
         category_id = request.data.get('category_id', None)
 
         if title is None:
-            return Response({'error': 'The \'Title\' is mandatory'}, status.HTTP_400_BAD_REQUEST)
+            return Response({'error': _('The \'Title\' is mandatory')}, status.HTTP_400_BAD_REQUEST)
         if description is None:
-            return Response({'error': 'The \'Description\' is mandatory'}, status.HTTP_400_BAD_REQUEST)
+            return Response({'error': _('The \'Description\' is mandatory')}, status.HTTP_400_BAD_REQUEST)
         if user_id is None:
-            return Response({'error': 'The \'User\' is mandatory'}, status.HTTP_400_BAD_REQUEST)
+            return Response({'error': -('The \'User\' is mandatory')}, status.HTTP_400_BAD_REQUEST)
         if category_id is None:
-            return Response({'error': 'The \'Category\' is mandatory'}, status.HTTP_400_BAD_REQUEST)
+            return Response({'error': _('The \'Category\' is mandatory')}, status.HTTP_400_BAD_REQUEST)
         try:
             user = User.objects.get(pk=user_id)
         except User.DoesNotExist:
-            return Response({'error': 'This user not found'}, status.HTTP_404_NOT_FOUND)
+            return Response({'error': _('This user not found')}, status.HTTP_404_NOT_FOUND)
         try:
             category = Category.objects.get(pk=category_id)
         except Category.DoesNotExist:
-            return Response({'error': 'This category not found'}, status.HTTP_404_NOT_FOUND)
+            return Response({'error': _('This category not found')}, status.HTTP_404_NOT_FOUND)
 
         job = Job(
             title=title,
@@ -175,7 +177,7 @@ class JobDetailsView(generics.RetrieveUpdateAPIView):
             )
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Job.DoesNotExist:
-            return Response({'error': 'This Job not found'}, status.HTTP_404_NOT_FOUND)
+            return Response({'error': _('This Job not found')}, status.HTTP_404_NOT_FOUND)
 
 
 class PhoneNumberFilter(drf_filters.FilterSet):
