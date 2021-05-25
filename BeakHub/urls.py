@@ -39,7 +39,7 @@ schema_view = get_schema_view(
 )
 
 
-urlpatterns = i18n_patterns[
+urlpatterns = [
     path("grappelli/", include("grappelli.urls")),
     path("admin/", admin.site.urls),
     path("api/v1/account/", include("Apps.account.urls")),
