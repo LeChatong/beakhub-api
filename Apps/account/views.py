@@ -7,7 +7,6 @@ from rest_framework import generics, status
 
 from Apps.account.models import User
 from Apps.account.serializers import UserSerializer
-from Apps.core.models import UserAPIKey
 from Apps.core.permissions import UserHasAPIKey
 
 from django.utils.translation import ugettext as _
@@ -28,6 +27,7 @@ def activation_account(request, key):
 
 
 class UserListView(generics.ListCreateAPIView):
+    print(UserHasAPIKey)
     permission_classes = [UserHasAPIKey]
     serializer_class = UserSerializer
     queryset = User.objects.all()
