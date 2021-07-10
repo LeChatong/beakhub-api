@@ -1,1 +1,1 @@
-web: gunicorn beakhub-api.wsgi --log-file -
+web: gunicorn BeakHub.wsgi --log-file -
