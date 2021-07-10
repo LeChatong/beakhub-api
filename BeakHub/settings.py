@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+
+import dj_database_url
 from decouple import config
 from dj_database_url import parse as dburl
 from pathlib import Path
@@ -33,6 +35,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "172.16.30.38",
     "127.0.0.1",
+    "https://beakhub-api.herokuapp.com/",
 ]
 
 
@@ -69,6 +72,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'account.User'
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -107,9 +111,29 @@ WSGI_APPLICATION = 'BeakHub.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-_DEFAULT_DATABASE_URL = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+if os.environ.get('ENV') == 'PRODUCTION':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'beakhubapidb',
+            'USER': 'postgres',
+            'PASSWORD': '123456',
+            'HOST': '',
+            'PORT': '5432',
+        }
+    }
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+    STATICFILES_DIRS = (
+        os.path.join(PROJECT_ROOT, 'static'),
+    )
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-DATABASES = {'default': config(
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES['default'].update(db_from_env)
+else:
+    _DEFAULT_DATABASE_URL = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+    DATABASES = {'default': config(
     'DATABASE_URL', default=_DEFAULT_DATABASE_URL, cast=dburl), }
 
 #DATABASES = {
