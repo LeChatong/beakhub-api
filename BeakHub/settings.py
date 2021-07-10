@@ -35,7 +35,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "172.16.30.38",
     "127.0.0.1",
-    "https://beakhub-api.herokuapp.com/",
+    "https://beakhub-api.herokuapp.com",
 ]
 
 
