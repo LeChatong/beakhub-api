@@ -16,6 +16,12 @@ from decouple import config
 from dj_database_url import parse as dburl
 from pathlib import Path
 
+
+def cast_bool(value: int):
+    if value:
+        return value == 1
+    return False
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from corsheaders.defaults import default_headers
 
@@ -29,13 +35,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '8^et=8@1g!2ah0o33^@v%$_)*c%zwfd5nf*mrh_+-j8-w=faz^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = cast_bool(os.environ.get('DEBUG', 1))
 
 ALLOWED_HOSTS = [
+    "beakhub-api.herokuapp.com",
     "localhost",
     "172.16.30.38",
     "127.0.0.1",
-    "https://beakhub-api.herokuapp.com",
 ]
 
 
