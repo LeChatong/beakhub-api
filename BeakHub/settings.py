@@ -128,13 +128,6 @@ if os.environ.get('ENV') == 'PRODUCTION':
             'PORT': '5432',
         }
     }
-    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
-    STATICFILES_DIRS = (
-        os.path.join(PROJECT_ROOT, 'static'),
-    )
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
     db_from_env = dj_database_url.config(conn_max_age=500)
     DATABASES['default'].update(db_from_env)
 else:
@@ -251,6 +244,8 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 #GRAPPELLI_INDEX_DASHBOARD = 'BeakHub.dashboard.CustomIndexDashboard'
 #GRAPPELLI_INDEX_DASHBOARD = {  # alternative method
